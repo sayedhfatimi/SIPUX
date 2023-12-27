@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/base.css">
+    <link rel="stylesheet" href="../node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/chart.js/dist/Chart.min.js"></script>
+    <script type="text/javascript">
+        window.$ = window.jQuery = require('jquery')
+
+        var stor = window.localStorage
+
+        function timeConverter(UNIX_timestamp) {
+            var a = new Date(UNIX_timestamp * 1000);
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
+            var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+            var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+            var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+            return time;
+        }
+
+        $(document).ready(function() {
+
+            $.get("overview.html", function(data) {
+                $(".mainContainer").html(data);
+            })
+
+            $(".assetNavLink").click(function() {
+                var x = $(this).text().toLowerCase().replace(/\s/g,'-');
+
+                stor.setItem("asset", x)
+
+                $.get("wallet.html", function (data) {
+                    $(".mainContainer").html(data);
+                })
+            })
+
+            $('.dropdown').on('show.bs.dropdown', function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+            });
+
+            $('.dropdown').on('hide.bs.dropdown', function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            });
+        })
+    </script>
+    <title>sipux</title>
+</head>
+
+<body style="background: linear-gradient(to right, #1a51e1, #04cef4);">
+    <header class="shadow">
+        <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="img/sipux_Logo.png" width="172" height="72" class="d-inline-block align-middle" alt="">
+            </a>
+            <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Overview</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wallets</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item assetNavLink" href="#"><img src="img/btc.svg" style="width: 2rem;" class="d-inline-block mr-2">Bitcoin</a>
+                            <a class="dropdown-item assetNavLink" href="#"><img src="img/bcc.svg" style="width: 2rem;" class="d-inline-block mr-2">Bitcoin Cash</a>
+                            <a class="dropdown-item assetNavLink" href="#"><img src="img/eth.svg" style="width: 2rem;" class="d-inline-block mr-2">Ethereum</a>
+                            <a class="dropdown-item assetNavLink" href="#"><img src="img/zec.svg" style="width: 2rem;" class="d-inline-block mr-2">ZCash</a>
+                            <a class="dropdown-item assetNavLink" href="#"><img src="img/xmr.svg" style="width: 2rem;" class="d-inline-block mr-2">Monero</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="progress" style="position: relative; border-radius: 0;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </header>
+    <div class="container-fluid mainContainer">
+        
+    </div>
+    <script>
+        require('./renderer.js')
+    </script>
+</body>
+
+</html>

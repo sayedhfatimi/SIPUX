@@ -1,0 +1,236 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var asset = stor.getItem("asset")
+
+        switch (asset) {
+            case "bitcoin":
+                var addr = "3QvPr4XsrJiSsmLbBgFY8z7uoKCHc6VZjr"
+
+                $(".assetImg").attr("src", "img/btc.svg")
+                $(".assetBalTag").text("BTC")
+                $("#walletAddr").attr("placeholder", addr)
+
+                $.get("https://api.blockcypher.com/v1/btc/main/addrs/" + addr, function (data) {
+
+                    $("#curBalance").attr("placeholder", (data.balance).toFixed(8))
+
+                    for (var i = 0; i < data.txrefs.length; i++) {
+                        $(".txTable").find('tbody')
+                            .append($('<tr>')
+                                .addClass('table-light')
+                                .append($('<td>')
+                                    .append($('<span>')
+                                        .addClass(function () {
+                                            if (data.txrefs[i].hasOwnProperty('spent')) {
+                                                return "oi oi-arrow-thick-left text-danger"
+                                            } else {
+                                                return "oi oi-arrow-thick-right text-success"
+                                            }
+                                        })
+                                    )
+                                )
+                                .append($('<td>')
+                                    .text(data.txrefs[i].confirmed)
+                                    .addClass('text-monospace')
+                                )
+                                .append($('<td>')
+                                    .append($('<a>')
+                                        .text(data.txrefs[i].tx_hash)
+                                        .attr('href', "https://live.blockcypher.com/btc/tx/" + data.txrefs[i].tx_hash)
+                                        .attr('target', '_blank')
+                                        .addClass('text-monospace')
+                                    )
+                                )
+                                .append($('<td>')
+                                    .addClass(function () {
+                                        if (data.txrefs[i].hasOwnProperty('spent')) {
+                                            return "text-danger font-weight-bold"
+                                        } else {
+                                            return "text-success font-weight-bold"
+                                        }
+                                    })
+                                    .text(function () {
+                                        var s
+                                        if (data.txrefs[i].hasOwnProperty('spent')) {
+                                            s = "-"
+                                        } else {
+                                            s = "+"
+                                        }
+                                        return s + (data.txrefs[i].value / 100000000).toFixed(8)
+                                    })
+                                    .addClass('text-monospace')
+                                )
+                            )
+
+                    }
+                })
+                break;
+            case "ethereum":
+                var addr = "0x9c0980a38655566efbfa3499aa8973a4345d6f7a"
+
+                $(".assetImg").attr("src", "img/eth.svg")
+                $(".assetBalTag").text("ETH")
+                $("#walletAddr").attr("placeholder", addr)
+
+                $.get("http://api.ethplorer.io/getAddressInfo/" + addr + "?apiKey=freekey", function (data) {
+
+                    $("#curBalance").attr("placeholder", (data.ETH.balance).toFixed(8))
+                })
+
+                $.get("http://api.ethplorer.io/getAddressTransactions/" + addr + "?apiKey=freekey", function (data) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        $(".txTable").find('tbody')
+                            .append($('<tr>')
+                                .addClass('table-light')
+                                .append($('<td>')
+                                    .append($('<span>')
+                                        .addClass(function () {
+                                            if (data[i].from == addr) {
+                                                return "oi oi-arrow-thick-left text-danger"
+                                            } else {
+                                                return "oi oi-arrow-thick-right text-success"
+                                            }
+                                        })
+                                    )
+                                )
+                                .append($('<td>')
+                                    .text(timeConverter(data[i].timestamp))
+                                    .addClass('text-monospace')
+                                    .addClass('text-right')
+                                )
+                                .append($('<td>')
+                                    .append($('<a>')
+                                        .text(data[i].hash)
+                                        .attr('href', "https://ethplorer.io/tx/" + data[i].hash)
+                                        .attr('target', '_blank')
+                                        .addClass('text-monospace')
+                                    )
+                                )
+                                .append($('<td>')
+                                    .addClass(function () {
+                                        if (data[i].from == addr) {
+                                            return "text-danger font-weight-bold"
+                                        } else {
+                                            return "text-success font-weight-bold"
+                                        }
+                                    })
+                                    .text(function () {
+                                        var s
+                                        if (data[i].from == addr) {
+                                            s = "-"
+                                        } else {
+                                            s = "+"
+                                        }
+                                        return s + (data[i].value).toFixed(8)
+                                    })
+                                    .addClass('text-monospace')
+                                    .addClass('text-right')
+                                )
+                            )
+                    }
+                })
+                break;
+            case "bitcoin-cash":
+                var addr = "173g2nBJ8Dxs7sazaTMY1TayAxQxFm7ous"
+
+                $(".assetImg").attr("src", "img/bcc.svg")
+                $(".assetBalTag").text("BCC")
+                $("#walletAddr").attr("placeholder", addr)
+
+                $.get("https://chain.api.btc.com/v3/address/" + addr + "/tx", function (data) {
+                    console.log(data)
+                })
+
+                break;
+            case "monero":
+                $(".assetImg").attr("src", "img/xmr.svg")
+                $(".assetBalTag").text("XMR")
+                $("#walletAddr").attr("placeholder", "44tLjmXrQNrWJ5NBsEj2R77ZBEgDa3fEe9GLpSf2FRmhexPvfYDUAB7EXX1Hdb3aMQ9FLqdJ56yaAhiXoRsceGJCRS3Jxkn")
+                break;
+            case "zcash":
+                $(".assetImg").attr("src", "img/zec.svg")
+                $(".assetBalTag").text("ZEC")
+                $("#walletAddr").attr("placeholder", "t1frHE7WpyrDybX3hEk4VPEmzoihKYsZmyu")
+        }
+    })
+</script>
+<div class="container p-3">
+    <table class="table table-borderless">
+        <tr>
+            <td colspan="2">
+                <img src="" style="height: 160px; width: 160px; background-color: white;" class="mx-auto d-block p-3 assetImg rounded-circle shadow">
+            </td>
+        </tr>
+    </table>
+    <div class="container bg-light border border-info rounded mb-3 shadow">
+        <table class="table table-borderless">
+            <tr>
+                <td colspan="2">
+                    <label for="curBalance">Current Balance:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg text-center" id="curBalance" placeholder="" readonly>
+                        <div class="input-group-append text-center">
+                            <span class="input-group-text assetBalTag"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <button type="button" class="btn btn-dark">Send</button>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#receiveModal">Receive</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <table class="table txTable table-hover" style="border-collapse: separate; border-spacing: 0rem 0.5rem;">
+            <thead class="shadow">
+                <tr class="table-light">
+                    <th></th>
+                    <th class="text-right">Date</th>
+                    <th>Transaction Hash</th>
+                    <th class="text-right">Change</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog" aria-labelledby="Receive" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>
+                                <!-- <div id="qrcode" class="mx-auto" style="height: 256px; width: 256px;"></div>
+                                <script type="text/javascript">
+                                    var qrcode = new QRCode("qrcode");
+                                    function makeCode() {
+                                        var elText = $("#btcWallet").attr("placeholder");
+                                        qrcode.makeCode(elText);
+                                    }
+                                    makeCode();
+                                </script> -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label for="walletAddr">
+                                        <span class="assetName"></span> Wallet Address:</label>
+                                    <input type="text" class="form-control form-control-lg text-center text-uppercase" id="walletAddr" placeholder="" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+{
+  "name": "sipux",
+  "version": "1.0.0",
+  "description": "Easy gateway to crypto",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^2.0.3",
+    "electron-packager": "^12.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "chart.js": "^2.7.2",
+    "jquery": "^3.3.1",
+    "open-iconic": "^1.1.1",
+    "openssl": "^1.1.0",
+    "popper.js": "^1.14.3",
+    "tooltip.js": "^1.2.0"
+  }
+}

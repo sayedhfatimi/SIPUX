@@ -1,0 +1,23 @@
+body {
+    padding-top: 98px;
+}
+a.dropdown-item {
+    font-size: 1.5rem;
+}
+li.nav-item {
+    font-size: 1.25rem;
+}
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}
+div.modal input {
+    font-size: 0.8rem;
+}
+div.container span.input-group-text {
+    width: 3.75rem;
+}
